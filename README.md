@@ -1,14 +1,20 @@
 # Football Match Momentum Analysis
 
-Interactive football match momentum analysis using open event data.
+Interactive football match momentum analysis using StatsBomb Open Data.
 
-This project recreates a football match momentum visualization for the 2022 FIFA World Cup Final between Argentina and France, using StatsBomb Open Data and a custom weighted attacking threat model.
+This project builds a custom momentum model for the **Argentina vs France 2022 FIFA World Cup Final**, estimating which team generated more attacking threat throughout the match.
+
+## Project Preview
+
+![Momentum chart](outputs/momentum_chart_preview.png)
+
+> Interactive version available in: `outputs/interactive_momentum_chart.html`
 
 ## Objective
 
-The goal of this project is to estimate and visualize which team generated more attacking threat during different phases of the match.
+The goal of this project is to move beyond basic match statistics such as possession, total passes or shots, and create a more meaningful view of match dominance.
 
-Instead of counting simple possession or total passes, the model assigns value to football actions that are more directly related to attacking danger.
+The model estimates attacking momentum by assigning weighted value to events that are more directly related to threat creation.
 
 ## Match Analyzed
 
@@ -18,11 +24,13 @@ Match ID: `3869685`
 
 ## Data Source
 
-The project uses StatsBomb Open Data, accessed through the `statsbombpy` Python package.
+This project uses **StatsBomb Open Data**, accessed through the `statsbombpy` Python package.
+
+No raw data files are stored in this repository.
 
 ## Methodology
 
-A custom momentum score is calculated from selected event types:
+The model calculates a custom momentum score using selected event types:
 
 - Shots
 - Progressive passes
@@ -32,11 +40,26 @@ A custom momentum score is calculated from selected event types:
 - Interceptions
 - High pressures
 
-The model applies higher weights to events that generate attacking threat, such as shots with high xG, progressive actions into advanced zones and goals.
+Each event is weighted according to its attacking relevance. Higher value is assigned to actions such as high-xG shots, goals, progressive carries into dangerous zones and passes that move the ball into advanced areas.
 
-The final momentum curve is calculated by aggregating scores by minute and smoothing the difference between both teams.
+The final momentum curve is created by:
 
-## Tools
+1. Calculating event-level momentum scores.
+2. Aggregating momentum by minute and team.
+3. Computing net momentum: Argentina minus France.
+4. Applying rolling smoothing to produce a continuous match momentum curve.
+5. Visualizing goals and momentum phases in an interactive Plotly chart.
+
+## Key Features
+
+- Event-level football data analysis
+- Custom attacking threat model
+- Interactive Plotly visualization
+- Goal timeline
+- Smoothed momentum curve
+- Reproducible notebook workflow
+
+## Tools Used
 
 - Python
 - pandas
@@ -44,25 +67,17 @@ The final momentum curve is calculated by aggregating scores by minute and smoot
 - Plotly
 - StatsBombPy
 
-## Output
-
-The project produces an interactive momentum chart showing:
-
-- Argentina momentum
-- France momentum
-- Net momentum curve
-- Goal timeline
-- Match phases
-
 ## Project Structure
 
 ```text
 football-momentum-analysis/
 ├── README.md
 ├── requirements.txt
+├── .gitignore
 ├── notebooks/
 │   └── momentum_analysis.ipynb
 ├── outputs/
-│   └── interactive_momentum_chart.html
+│   ├── interactive_momentum_chart.html
+│   └── momentum_chart_preview.png
 └── data/
     └── README.md
