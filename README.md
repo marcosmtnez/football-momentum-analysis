@@ -4,80 +4,157 @@ Interactive football match momentum analysis using StatsBomb Open Data.
 
 This project builds a custom momentum model for the **Argentina vs France 2022 FIFA World Cup Final**, estimating which team generated more attacking threat throughout the match.
 
+## Interactive Visualization
+
+The interactive version of the chart is available here:
+
+[Open Interactive Momentum Chart](https://marcosmtnez.github.io/football-momentum-analysis/interactive_momentum_chart.html)
+
 ## Project Preview
 
-![Momentum chart](outputs/momentum_chart_preview.png)
+![Momentum Chart Preview](outputs/momentum_chart_preview.png)
 
-> Interactive version available in: `outputs/interactive_momentum_chart.html`
+## Project Overview
 
-## Objective
+Momentum charts are increasingly used in football broadcasts to show how the rhythm and control of a match changes over time.
 
-The goal of this project is to move beyond basic match statistics such as possession, total passes or shots, and create a more meaningful view of match dominance.
+The objective of this project was to explore what could be behind this type of visualization and build a custom version using event-level football data.
 
-The model estimates attacking momentum by assigning weighted value to events that are more directly related to threat creation.
+Instead of relying only on traditional statistics such as possession, total passes or total shots, this project estimates attacking momentum by assigning value to actions that move a team closer to creating danger.
+
+The final model produces an interactive visualization that shows how attacking threat evolved during one of the most dramatic football matches ever played.
 
 ## Match Analyzed
 
-**Argentina 3 - 3 France**  
-FIFA World Cup Final 2022  
-Match ID: `3869685`
+**Argentina vs France**
+**2022 FIFA World Cup Final**
+Final score: Argentina 3–3 France
+Argentina won after penalties.
+
+This match was selected because it offers a very strong momentum narrative:
+
+* Argentina dominated large periods of the match.
+* France produced a dramatic comeback through Kylian Mbappé.
+* Extra time created several shifts in control.
+* The penalty shootout was excluded from the momentum model to focus only on open-play and match-time events.
 
 ## Data Source
 
-This project uses **StatsBomb Open Data**, accessed through the `statsbombpy` Python package.
+The project uses **StatsBomb Open Data**, accessed through the `statsbombpy` Python package.
 
-No raw data files are stored in this repository.
+Event data includes detailed match actions such as:
+
+* Shots
+* Passes
+* Carries
+* Dribbles
+* Pressures
+* Interceptions
+* Recoveries
 
 ## Methodology
 
-The model calculates a custom momentum score using selected event types:
+A custom weighted attacking threat index was created using event-level data.
 
-- Shots
-- Progressive passes
-- Progressive carries
-- Successful dribbles
-- High recoveries
-- Interceptions
-- High pressures
+The model considers several types of actions:
 
-Each event is weighted according to its attacking relevance. Higher value is assigned to actions such as high-xG shots, goals, progressive carries into dangerous zones and passes that move the ball into advanced areas.
+* Shots and expected goals (xG)
+* Progressive passes
+* Progressive carries
+* Successful dribbles
+* High recoveries
+* Interceptions
+* Pressures in advanced areas
 
-The final momentum curve is created by:
+Each event is assigned a value depending on its attacking relevance. The values are then aggregated by minute, comparing Argentina and France to estimate net momentum throughout the match.
 
-1. Calculating event-level momentum scores.
-2. Aggregating momentum by minute and team.
-3. Computing net momentum: Argentina minus France.
-4. Applying rolling smoothing to produce a continuous match momentum curve.
-5. Visualizing goals and momentum phases in an interactive Plotly chart.
+Positive values represent Argentina momentum, while negative values represent France momentum.
 
-## Key Features
+The final signal is smoothed using a rolling window to make the match rhythm easier to interpret visually.
 
-- Event-level football data analysis
-- Custom attacking threat model
-- Interactive Plotly visualization
-- Goal timeline
-- Smoothed momentum curve
-- Reproducible notebook workflow
+## Key Design Decisions
 
-## Tools Used
+Several decisions were made to make the model more realistic:
 
-- Python
-- pandas
-- numpy
-- Plotly
-- StatsBombPy
+* Penalty shootout events were removed from the analysis.
+* Goalkeeper long clearances were filtered out to avoid artificial progressive actions.
+* Progressive actions were only considered when they moved the ball meaningfully towards goal.
+* Shots were weighted using expected goals.
+* Goals were highlighted as key events but not allowed to fully dominate the momentum curve.
+* Match phases such as half-time, full-time and extra time were added to improve interpretation.
 
-## Project Structure
+## Technologies Used
+
+* Python
+* pandas
+* numpy
+* Plotly
+* StatsBomb Open Data
+* statsbombpy
+* Jupyter Notebook
+* GitHub Pages
+
+## Repository Structure
 
 ```text
 football-momentum-analysis/
-├── README.md
-├── requirements.txt
-├── .gitignore
+├── data/
+│   └── README.md
 ├── notebooks/
 │   └── momentum_analysis.ipynb
 ├── outputs/
 │   ├── interactive_momentum_chart.html
 │   └── momentum_chart_preview.png
-└── data/
-    └── README.md
+├── interactive_momentum_chart.html
+├── README.md
+├── requirements.txt
+└── .gitignore
+```
+
+## How to Run the Project
+
+Clone the repository:
+
+```bash
+git clone https://github.com/marcosmtnez/football-momentum-analysis.git
+cd football-momentum-analysis
+```
+
+Install the required packages:
+
+```bash
+pip install -r requirements.txt
+```
+
+Run the notebook:
+
+```bash
+jupyter notebook notebooks/momentum_analysis.ipynb
+```
+
+The notebook generates:
+
+* An interactive HTML chart in the project root.
+* A copy of the interactive chart inside the `outputs/` folder.
+* A static PNG preview for the README.
+
+## Outputs
+
+The main outputs of the project are:
+
+* `interactive_momentum_chart.html`: interactive Plotly visualization published with GitHub Pages.
+* `outputs/interactive_momentum_chart.html`: exported project output.
+* `outputs/momentum_chart_preview.png`: static preview used in the README.
+
+## Main Takeaway
+
+This project shows how football event data can be transformed into a visual narrative of a match.
+
+The final chart reflects many of the key moments from the 2022 World Cup Final: Argentina's early dominance, France's sudden comeback, the intensity of extra time and the changing rhythm of one of the most memorable finals in football history.
+
+## Author
+
+**Marcos Martínez**
+Data Science student interested in sports analytics, football analytics and data visualization.
+
+GitHub: [marcosmtnez](https://github.com/marcosmtnez)
